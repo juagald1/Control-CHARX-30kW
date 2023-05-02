@@ -43,8 +43,33 @@ def Recepcion_CAN(datos_CAN):
 
     # Obtiene información según ID
     if(ID == 0x281):
-        Signo = datos_CAN.data
-        print(Signo)
+        #TENSION
+        MS_Byte1 = format(datos_CAN.data[0], '08b')
+        MS_Byte2 = format(datos_CAN.data[1], '08b')
+        MS_Byte3 = format(datos_CAN.data[2], '08b')
+        MS_Byte4 = format(datos_CAN.data[3], '08b')
+
+        # Obtiene Signo
+        if (MS_Byte1[0] == '1'):
+            Signo = -1
+        else:
+            Signo = 1
+
+        # Obtiene E
+        bin_string = (MS_Byte1[1] + MS_Byte1[2] + MS_Byte1[3] + MS_Byte1[4] + MS_Byte1[5] + MS_Byte1[6] + MS_Byte1[7] + MS_Byte2[0])
+        E = int(bin_string, 2)
+
+        # Obtiene M
+        bin_string = (MS_Byte2[1] + MS_Byte2[2] + MS_Byte2[3] + MS_Byte2[4] + MS_Byte2[5] + MS_Byte2[6] + MS_Byte2[7] + MS_Byte3 + MS_Byte4)
+        M = int(bin_string, 2)
+
+        # Obtiene Valor Tensión Salida
+        Tension_Salida = (1 + M * 2 ** (-23)) * 2 ** (E - 127)
+        Tension_Salida = (Signo)*(Tension_Salida)
+        print((Tension_Salida))
+
+
+
 
 
     elif(ID == 0x282):
