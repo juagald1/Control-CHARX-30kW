@@ -41,7 +41,9 @@ def Recepcion_CAN(datos_CAN):
     #Obtiene ID
     ID = ((datos_CAN.arbitration_id >> 16) & 0xFFFF)
 
-    # Obtiene información según ID
+    # Filtra por ID
+
+    # TENSION Y CORRIENTE DE SALIDA
     if(ID == 0x281):
 
         #TENSION SALIDA
@@ -67,7 +69,7 @@ def Recepcion_CAN(datos_CAN):
         # Obtiene Valor Tensión Salida
         Tension_Salida = (1 + M * 2 ** (-23)) * 2 ** (E - 127)
         Tension_Salida = (Signo)*(Tension_Salida)
-        print((Tension_Salida))
+        print("Tension Salida ", Tension_Salida)
 
         #CORRIENTE SALIDA
         MS_Byte5 = format(datos_CAN.data[4], '08b')
@@ -92,15 +94,25 @@ def Recepcion_CAN(datos_CAN):
         # Obtiene Valor Tensión Salida
         Corriente_Salida = (1 + M * 2 ** (-23)) * 2 ** (E - 127)
         Corriente_Salida = (Signo)*(Corriente_Salida)
-        print((Corriente_Salida))
+        print("Corriente Salida ", Corriente_Salida)
 
-
-
-
-
-
+    # NUMERO MODULOS SISTEMA
     elif(ID == 0x282):
-        print("ID 282")
+        MS_Byte3 = format(datos_CAN.data[2], '08b')
+        Numero_Modulos = int(MS_Byte3, 2)
+        print("Numero Modulos ", Numero_Modulos)
+
+    # GRUPO MODULO, TEMPERATURA y ESTADO
+    elif(ID == 0x284):
+        MS_Byte3 = format(datos_CAN.data[2], '08b')
+        Grupo = int(MS_Byte3, 2)
+        print("Grupo ", Grupo)
+
+        MS_Byte5 = format(datos_CAN.data[4], '08b')
+        Temperatura_Modulo = int(MS_Byte5, 2)
+        print("Temperatura Modulo ",Temperatura_Modulo)
+
+
 
 
 
@@ -255,6 +267,7 @@ class MainWindow(QMainWindow):
         self.boton_parada_ctrl.move(320, 250)
         self.boton_parada_ctrl.setDisabled(True)
         self.boton_parada_ctrl.setStyleSheet("background-color:rgb(249,172,174)")
+        
 
     def metodo_click_boton_desc_disp(self):
         self.label_desc_disp.setText(Descubre_Dispositivo())
