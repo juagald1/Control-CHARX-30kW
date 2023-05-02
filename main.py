@@ -37,7 +37,20 @@ def Envio_CAN_idext(id, datos):
 
 
 def Recepcion_CAN(datos_CAN):
-    print(datos_CAN)
+
+    #Obtiene ID
+    ID = ((datos_CAN.arbitration_id >> 16) & 0xFFFF)
+
+    # Obtiene información según ID
+    if(ID == 0x281):
+        Signo = datos_CAN.data
+        print(Signo)
+
+
+    elif(ID == 0x282):
+        print("ID 282")
+
+
 
 
 # HILOS
