@@ -43,7 +43,8 @@ def Recepcion_CAN(datos_CAN):
 
     # Obtiene información según ID
     if(ID == 0x281):
-        #TENSION
+
+        #TENSION SALIDA
         MS_Byte1 = format(datos_CAN.data[0], '08b')
         MS_Byte2 = format(datos_CAN.data[1], '08b')
         MS_Byte3 = format(datos_CAN.data[2], '08b')
@@ -67,6 +68,32 @@ def Recepcion_CAN(datos_CAN):
         Tension_Salida = (1 + M * 2 ** (-23)) * 2 ** (E - 127)
         Tension_Salida = (Signo)*(Tension_Salida)
         print((Tension_Salida))
+
+        #CORRIENTE SALIDA
+        MS_Byte5 = format(datos_CAN.data[4], '08b')
+        MS_Byte6 = format(datos_CAN.data[5], '08b')
+        MS_Byte7 = format(datos_CAN.data[6], '08b')
+        MS_Byte8 = format(datos_CAN.data[7], '08b')
+
+        # Obtiene Signo
+        if (MS_Byte5[0] == '1'):
+            Signo = -1
+        else:
+            Signo = 1
+
+        # Obtiene E
+        bin_string = (MS_Byte5[1] + MS_Byte5[2] + MS_Byte5[3] + MS_Byte5[4] + MS_Byte5[5] + MS_Byte5[6] + MS_Byte5[7] + MS_Byte6[0])
+        E = int(bin_string, 2)
+
+        # Obtiene M
+        bin_string = (MS_Byte6[1] + MS_Byte6[2] + MS_Byte6[3] + MS_Byte6[4] + MS_Byte6[5] + MS_Byte6[6] + MS_Byte6[7] + MS_Byte7 + MS_Byte8)
+        M = int(bin_string, 2)
+
+        # Obtiene Valor Tensión Salida
+        Corriente_Salida = (1 + M * 2 ** (-23)) * 2 ** (E - 127)
+        Corriente_Salida = (Signo)*(Corriente_Salida)
+        print((Corriente_Salida))
+
 
 
 
