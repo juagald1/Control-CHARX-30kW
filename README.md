@@ -2,7 +2,7 @@
 Control de convertidor de potencia CHARX 30kW, mediante interfaz gráfica y CAN bus
 
 # Hardware Requerido
-- Microcontrolador Transceiver USB/CAN
+- Transceiver USB/CAN (IXXAT, PCAN o similar)
 
 #  Hilos
 ![alt text](
